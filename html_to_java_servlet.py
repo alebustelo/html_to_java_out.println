@@ -1,28 +1,34 @@
+#Alejandro Bustelo
 #05/10/2017
-#python 3
-import os
+#Python 3
+#Turn an HTML document into a out.println() statement that
+#can be used in a Java servlet to generate a webpage
 
 def main():
 
-	print('Enter the filename of the html file to process:')
+	print('Enter the filename of the HTML file to process:')
 	fileName = input()
 	outputFile = open(fileName+'_java.txt', 'w')
-	tempLine = ''
-	firstLine = True
+	tempLine = None
 
 	with open(fileName) as f:
 		lines = f.readlines()
-		last = lines[-1]
-		for line in lines[:-1]:
-			tempLine = line.rstrip()
-			tempLine.replace('"', r'\"')
-			if firstLine:
-				tempLine = 'out.println("' + tempLine + '"\n'
-				firstLine = False
-			else:
-				tempLine = '\t+ "' + tempLine + '"\n'
+		first = lines[0].rstrip().replace('"', r'\"')
+		last = lines[-1].rstrip().replace('"', r'\"')
+		
+		#open("
+		tempLine = 'out.println("' + first + r'\n"' + '\n'
+		outputFile.write(tempLine)
+		
+		#HTML content
+		for line in lines[1:-1]:
+			tempLine = line.rstrip().replace('"', r'\"')
+			tempLine = '\t+ "' + tempLine + r'\n"' + '\n'
 			outputFile.write(tempLine)
-		tempLine = '\t+ "' + last.rstrip() + '");'
+		
+		#");
+		tempLine = '\t+ "' + last + r'");'
+		
 		outputFile.write(tempLine)
 		
 main()
